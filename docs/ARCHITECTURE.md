@@ -174,6 +174,7 @@ EXE-prototype/
 ├── .gitignore
 ├── package.json
 ├── hardhat.config.js
+├── config.js
 └── README.md
 ```
 
