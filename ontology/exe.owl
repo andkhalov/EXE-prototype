@@ -1,0 +1,323 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix exe:  <https://exe.ai#> .
+
+################################################################################
+# Ontology Header
+################################################################################
+
+exe:EXEOntology a owl:Ontology ;
+    rdfs:label "EXE Ontology" ;
+    rdfs:comment """
+An ontology describing the EXE ecosystem, providing semantic definitions for 
+agents, tasks, tokens, resources, events, roles, statuses, and decentralized 
+applications in a DeFi context. This ontology aims to unify on-chain and 
+off-chain data under a common semantic model, enabling interoperability 
+and advanced reasoning.
+""" ;
+    owl:versionInfo "1.1.0" .
+
+################################################################################
+# Core Classes
+################################################################################
+
+# Represents an autonomous agent in the EXE ecosystem
+exe:Agent a owl:Class ;
+    rdfs:label "Agent" ;
+    rdfs:comment """
+An entity (either human, AI, or automated component) capable of performing 
+tasks, holding tokens, negotiating, or interacting with smart contracts. 
+Agents can also have specific roles and attributes (e.g., on-chain address).
+""" .
+
+# A unit of work or job to be performed, possibly requiring multiple agents
+exe:Task a owl:Class ;
+    rdfs:label "Task" ;
+    rdfs:comment """
+A discrete piece of work in the EXE ecosystem that may require various resources 
+and can be paid or rewarded in tokens. A task typically transitions through 
+different statuses (e.g., Created, InProgress, Completed).
+""" .
+
+# A high-level concept representing possible statuses a Task can have
+exe:TaskStatus a owl:Class ;
+    rdfs:label "Task Status" ;
+    rdfs:comment """
+A conceptual class representing the possible lifecycle statuses of a Task, 
+such as Created, InProgress, Completed, or Cancelled.
+""" .
+
+# Any resource needed for task execution (e.g., GPU compute, data sets, external APIs)
+exe:Resource a owl:Class ;
+    rdfs:label "Resource" ;
+    rdfs:comment """
+A generic resource required to fulfill a Task. Could be computational capacity, 
+data sets, APIs, or any external tool/service essential for task execution.
+""" .
+
+# A digital asset or token in the EXE ecosystem
+exe:Token a owl:Class ;
+    rdfs:label "Token" ;
+    rdfs:comment """
+Represents a cryptographic token or currency, such as EXE tokens or other 
+ERC-20 assets. Tokens can be used for payments, staking, collateral, etc.
+""" .
+
+# Any significant occurrence or action in the network, typically logged on-chain
+exe:Event a owl:Class ;
+    rdfs:label "Event" ;
+    rdfs:comment """
+Captures a notable occurrence in the ecosystem, such as task creation, 
+completion, payment release, agent registration, or on-chain transactions.
+Events can reference tasks, agents, or external protocols.
+""" .
+
+# A decentralized application that interacts with the EXE protocol
+exe:dApp a owl:Class ;
+    rdfs:label "dApp" ;
+    rdfs:comment """
+A decentralized application integrating with the EXE protocol for agent 
+collaboration or DeFi operations. dApps may utilize one or more Agents 
+and can emit or handle Events.
+""" .
+
+# A specialized type of dApp focusing on decentralized finance
+exe:DeFiProtocol a owl:Class ;
+    rdfs:label "DeFi Protocol" ;
+    rdfs:comment """
+Represents a DeFi-focused application or platform, typically providing 
+financial services like lending, liquidity pools, flash loans, etc.
+This class is a specialization of the general dApp concept.
+""" ;
+    rdfs:subClassOf exe:dApp .
+
+# An entity describing the functional or operational role an Agent can play
+exe:Role a owl:Class ;
+    rdfs:label "Role" ;
+    rdfs:comment """
+Represents a role (e.g., Validator, Lender, LiquidityProvider) that can be 
+assigned to Agents to indicate their functional responsibilities in the EXE ecosystem.
+""" .
+
+################################################################################
+# Task Status Individuals (Enumeration Example)
+################################################################################
+
+exe:Created a owl:NamedIndividual ,
+                  exe:TaskStatus ;
+    rdfs:label "Created" ;
+    rdfs:comment "Indicates that a Task has been newly created but not yet started." .
+
+exe:InProgress a owl:NamedIndividual ,
+                     exe:TaskStatus ;
+    rdfs:label "In Progress" ;
+    rdfs:comment "Indicates that a Task is actively being worked on by an Agent or multiple Agents." .
+
+exe:Completed a owl:NamedIndividual ,
+                    exe:TaskStatus ;
+    rdfs:label "Completed" ;
+    rdfs:comment "Indicates that a Task is fully finished, and all required steps have been executed." .
+
+exe:Cancelled a owl:NamedIndividual ,
+                    exe:TaskStatus ;
+    rdfs:label "Cancelled" ;
+    rdfs:comment "Indicates that a Task was terminated or deemed invalid before completion." .
+
+################################################################################
+# Object Properties
+################################################################################
+
+# Links an Agent to a Task being performed
+exe:performsTask a owl:ObjectProperty ;
+    rdfs:domain exe:Agent ;
+    rdfs:range exe:Task ;
+    rdfs:label "performs task" ;
+    rdfs:comment """
+Relates an Agent to the Task(s) it actively performs or is responsible for. 
+An Agent may perform multiple tasks, possibly in parallel.
+""" .
+
+# Links a Task to a Resource it requires
+exe:requiresResource a owl:ObjectProperty ;
+    rdfs:domain exe:Task ;
+    rdfs:range exe:Resource ;
+    rdfs:label "requires resource" ;
+    rdfs:comment """
+Indicates which Resource(s) a Task depends on. Tasks may require multiple 
+resources, such as compute power, data sets, or external services.
+""" .
+
+# Links a Task or Agent to Token usage (e.g., payment, staking, collateral)
+exe:usesToken a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ; # can be Agent or Task
+    rdfs:range exe:Token ;
+    rdfs:label "uses token" ;
+    rdfs:comment """
+Associates a Task or an Agent with a specific Token usage. For example, 
+a Task may use a token for payment, while an Agent may stake or earn tokens.
+""" .
+
+# Links an Event to a Task it references
+exe:refersToTask a owl:ObjectProperty ;
+    rdfs:domain exe:Event ;
+    rdfs:range exe:Task ;
+    rdfs:label "refers to task" ;
+    rdfs:comment """
+Captures which Task is mentioned by or impacted by an Event. For instance, 
+a 'TaskCompleted' event would refer to the specific Task that was finished.
+""" .
+
+# Links an Agent or dApp to a DeFi protocol it implements or is part of
+exe:implementsProtocol a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ; # could be Agent or dApp
+    rdfs:range exe:DeFiProtocol ;
+    rdfs:label "implements protocol" ;
+    rdfs:comment """
+Indicates that an Agent or a dApp integrates a specific DeFi protocol. 
+For example, a 'LiquidityProviderAgent' may implement the 'Aave' protocol.
+""" .
+
+# Assigns a Task to a specific Agent (e.g. to be performed or validated)
+exe:assignedTo a owl:ObjectProperty ;
+    rdfs:domain exe:Task ;
+    rdfs:range exe:Agent ;
+    rdfs:label "assigned to" ;
+    rdfs:comment """
+Indicates the Agent who is currently responsible for or assigned to the Task. 
+This can be used in conjunction with 'performsTask' but provides explicit 
+ownership or assignment semantics.
+""" .
+
+# Associates an Event with the Agent or dApp that triggered or caused it
+exe:wasTriggeredBy a owl:ObjectProperty ;
+    rdfs:domain exe:Event ;
+    rdfs:range owl:Thing ; 
+    rdfs:label "was triggered by" ;
+    rdfs:comment """
+Indicates which Agent, Role, or dApp caused or initiated a given Event. 
+This can be useful for tracing actions on-chain or in logs back to an initiator.
+""" .
+
+################################################################################
+# Object Properties for Task Status
+################################################################################
+
+# Relates a Task to its current status (defined as an individual of exe:TaskStatus)
+exe:hasStatus a owl:ObjectProperty ;
+    rdfs:domain exe:Task ;
+    rdfs:range exe:TaskStatus ;
+    rdfs:label "has status" ;
+    rdfs:comment """
+Associates a Task with its current status, which should be one of the 
+enumerated TaskStatus individuals (Created, InProgress, Completed, Cancelled).
+""" .
+
+################################################################################
+# Object Properties for Roles
+################################################################################
+
+# Denotes that an Agent holds (or is assigned) a particular Role
+exe:hasRole a owl:ObjectProperty ;
+    rdfs:domain exe:Agent ;
+    rdfs:range exe:Role ;
+    rdfs:label "has role" ;
+    rdfs:comment """
+Indicates the Role assigned to a particular Agent. Roles might specify 
+capabilities or responsibilities within the EXE ecosystem 
+(e.g., Validator, LendingAgent, LiquidityProvider).
+""" .
+
+################################################################################
+# Data Properties
+################################################################################
+
+exe:hasAddress a owl:DatatypeProperty ;
+    rdfs:domain exe:Agent ;
+    rdfs:range xsd:string ;
+    rdfs:label "has address" ;
+    rdfs:comment """
+Stores an Agent's on-chain address (e.g., Ethereum address, 
+CrossFi testnet address, etc.).
+""" .
+
+exe:hasName a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:string ;
+    rdfs:label "has name" ;
+    rdfs:comment """
+A general property for storing a human-readable name of any entity 
+(e.g., Agent, Task, Token, Resource, dApp, etc.).
+""" .
+
+exe:hasDescription a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:string ;
+    rdfs:label "has description" ;
+    rdfs:comment """
+A textual description or note about an entity, such as a Task, Resource, 
+Event, Token, or Agent.
+""" .
+
+exe:hasCreationDate a owl:DatatypeProperty ;
+    rdfs:domain exe:Task ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has creation date" ;
+    rdfs:comment """
+Records the timestamp (dateTime) of when a Task was originally created 
+or registered in the system.
+""" .
+
+exe:hasDeadline a owl:DatatypeProperty ;
+    rdfs:domain exe:Task ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has deadline" ;
+    rdfs:comment """
+Optional property indicating the desired or required completion date/time 
+for a Task. Agents can use this to prioritize or schedule tasks.
+""" .
+
+exe:hasBlockNumber a owl:DatatypeProperty ;
+    rdfs:domain exe:Event ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has block number" ;
+    rdfs:comment """
+Stores the blockchain block number at which an Event was recorded, 
+allowing for an immutable reference to the on-chain state.
+""" .
+
+exe:hasTransactionHash a owl:DatatypeProperty ;
+    rdfs:domain exe:Event ;
+    rdfs:range xsd:string ;
+    rdfs:label "has transaction hash" ;
+    rdfs:comment """
+References the specific blockchain transaction hash in which this Event 
+took place, enabling traceability to on-chain data.
+""" .
+
+################################################################################
+# Example Individuals (optional demonstration)
+################################################################################
+
+# Some known DeFi protocols
+exe:Aave a exe:DeFiProtocol ;
+    exe:hasName "Aave" ;
+    rdfs:comment "An example DeFi protocol supporting liquidity pools, flash loans, and lending operations." .
+
+exe:Compound a exe:DeFiProtocol ;
+    exe:hasName "Compound" ;
+    rdfs:comment "Another well-known DeFi protocol for lending and borrowing, used as an example here." .
+
+# Examples of Roles
+exe:ValidatorRole a exe:Role ;
+    exe:hasName "Validator Role" ;
+    rdfs:comment "Agents with this role can validate tasks, check correctness, and potentially use ZK proofs." .
+
+exe:LiquidityProviderRole a exe:Role ;
+    exe:hasName "Liquidity Provider Role" ;
+    rdfs:comment "Agents with this role supply liquidity to DeFi protocols or handle liquidity operations." .
+
+################################################################################
+# End of EXE Ontology
+################################################################################
