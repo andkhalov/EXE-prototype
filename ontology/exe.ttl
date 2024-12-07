@@ -1,0 +1,691 @@
+@prefix : <https://exe.ai#EXEOntology#> .
+@prefix exe: <https://exe.ai#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://exe.ai#EXEOntology#> .
+
+<https://exe.ai#EXEOntology> rdf:type owl:Ontology ;
+                              rdfs:comment """
+An ontology describing the EXE ecosystem in detail. It defines:
+ - Agents (their networks, capabilities, and data formats),
+ - Tasks (including statuses, resources, collaboration),
+ - Various protocol types (DeFi, GameFi, SocialFi, Gambling),
+ - Interactions (H2M, M2M, M2H),
+ - Negotiations between agents,
+ - On-chain contracts,
+ - and the concept of collaboration to achieve complex tasks.
+""" ;
+                              rdfs:label "EXE Ontology" ;
+                              owl:versionInfo "2.0.0" .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://exe.ai#assignedTo
+exe:assignedTo rdf:type owl:ObjectProperty ;
+               rdfs:domain exe:Task ;
+               rdfs:range exe:Agent ;
+               rdfs:comment """
+Specifies the Agent currently responsible for or assigned to a given Task.
+""" ;
+               rdfs:label "assigned to" .
+
+
+###  https://exe.ai#collaborationForTask
+exe:collaborationForTask rdf:type owl:ObjectProperty ;
+                         rdfs:domain exe:Collaboration ;
+                         rdfs:range exe:Task ;
+                         rdfs:comment """
+Specifies the Task that is the focus or target of a Collaboration. 
+""" ;
+                         rdfs:label "collaboration for task" .
+
+
+###  https://exe.ai#collaborationInvolvesAgent
+exe:collaborationInvolvesAgent rdf:type owl:ObjectProperty ;
+                               rdfs:domain exe:Collaboration ;
+                               rdfs:range exe:Agent ;
+                               rdfs:comment """
+Indicates that a Collaboration instance involves a particular Agent. 
+Multiple Agents can be part of the same collaboration.
+""" ;
+                               rdfs:label "collaboration involves agent" .
+
+
+###  https://exe.ai#hasBridge
+exe:hasBridge rdf:type owl:ObjectProperty ;
+              rdfs:domain [ rdf:type owl:Class ;
+                            owl:unionOf ( exe:Agent
+                                          exe:Contract
+                                        )
+                          ] ;
+              rdfs:range exe:Bridge ;
+              rdfs:comment """
+Shows the bridging mechanism that an Agent or Contract uses to interface 
+with the EXE main environment or other chains.
+""" ;
+              rdfs:label "has bridge" .
+
+
+###  https://exe.ai#hasCapability
+exe:hasCapability rdf:type owl:ObjectProperty ;
+                  rdfs:domain exe:Agent ;
+                  rdfs:range exe:Capability ;
+                  rdfs:comment """
+Indicates a specialized skill or function an Agent can perform 
+(e.g. 'validates tasks', 'provides liquidity').
+""" ;
+                  rdfs:label "has capability" .
+
+
+###  https://exe.ai#hasInteractionType
+exe:hasInteractionType rdf:type owl:ObjectProperty ;
+                       rdfs:domain [ rdf:type owl:Class ;
+                                     owl:unionOf ( exe:Agent
+                                                   exe:Collaboration
+                                                   exe:Task
+                                                 )
+                                   ] ;
+                       rdfs:range exe:InteractionType ;
+                       rdfs:comment """
+Specifies the mode (H2M, M2M, M2H) in which a Task, Collaboration, or Agent 
+operates or communicates.
+""" ;
+                       rdfs:label "has interaction type" .
+
+
+###  https://exe.ai#hasNegotiation
+exe:hasNegotiation rdf:type owl:ObjectProperty ;
+                   rdfs:domain exe:Collaboration ;
+                   rdfs:range exe:Negotiation ;
+                   rdfs:comment """
+Indicates that a Collaboration includes or spawns a Negotiation process 
+(e.g., terms, payment, resource sharing).
+""" ;
+                   rdfs:label "has negotiation" .
+
+
+###  https://exe.ai#hasRole
+exe:hasRole rdf:type owl:ObjectProperty ;
+            rdfs:domain exe:Agent ;
+            rdfs:range exe:Role ;
+            rdfs:comment """
+Assigns a functional Role (e.g., Validator, LiquidityProvider, Player) to an Agent.
+""" ;
+            rdfs:label "has role" .
+
+
+###  https://exe.ai#hasStatus
+exe:hasStatus rdf:type owl:ObjectProperty ;
+              rdfs:domain exe:Task ;
+              rdfs:range exe:TaskStatus ;
+              rdfs:comment """
+Relates a Task to its lifecycle status (Created, InProgress, Completed, Cancelled).
+""" ;
+              rdfs:label "has status" .
+
+
+###  https://exe.ai#implementsProtocol
+exe:implementsProtocol rdf:type owl:ObjectProperty ;
+                       rdfs:domain [ rdf:type owl:Class ;
+                                     owl:unionOf ( exe:Agent
+                                                   exe:dApp
+                                                 )
+                                   ] ;
+                       rdfs:range exe:Protocol ;
+                       rdfs:comment """
+Indicates that an Agent or dApp integrates a specific protocol (DeFi, GameFi, 
+SocialFi, Gambling, etc.) for specialized functionality.
+""" ;
+                       rdfs:label "implements protocol" .
+
+
+###  https://exe.ai#managedBy
+exe:managedBy rdf:type owl:ObjectProperty ;
+              rdfs:domain exe:Contract ;
+              rdfs:range exe:Agent ;
+              rdfs:comment """
+Indicates the Agent responsible for deploying or managing a particular Contract 
+(e.g., owns the contract or can upgrade it).
+""" ;
+              rdfs:label "managed by" .
+
+
+###  https://exe.ai#negotiatesWith
+exe:negotiatesWith rdf:type owl:ObjectProperty ;
+                   rdfs:domain exe:Agent ;
+                   rdfs:range exe:Agent ;
+                   rdfs:comment """
+Agent-to-Agent negotiation relationship. It can be used in parallel with 
+a Negotiation instance or simply to denote a historical or ongoing negotiation link.
+""" ;
+                   rdfs:label "negotiates with" .
+
+
+###  https://exe.ai#operatesOnNetwork
+exe:operatesOnNetwork rdf:type owl:ObjectProperty ;
+                      rdfs:domain [ rdf:type owl:Class ;
+                                    owl:unionOf ( exe:Agent
+                                                  exe:Contract
+                                                )
+                                  ] ;
+                      rdfs:range exe:BlockchainNetwork ;
+                      rdfs:comment """
+Indicates the blockchain network on which an Agent is primarily active or 
+where a Contract is deployed.
+""" ;
+                      rdfs:label "operates on network" .
+
+
+###  https://exe.ai#performsTask
+exe:performsTask rdf:type owl:ObjectProperty ;
+                 rdfs:domain exe:Agent ;
+                 rdfs:range exe:Task ;
+                 rdfs:comment """
+Relates an Agent to the Task(s) it is executing or responsible for. 
+Multiple Agents can perform the same Task if collaborating.
+""" ;
+                 rdfs:label "performs task" .
+
+
+###  https://exe.ai#refersToTask
+exe:refersToTask rdf:type owl:ObjectProperty ;
+                 rdfs:domain exe:Event ;
+                 rdfs:range exe:Task ;
+                 rdfs:comment """
+Links an Event to the Task it concerns (e.g., TaskCreated event).
+""" ;
+                 rdfs:label "refers to task" .
+
+
+###  https://exe.ai#requiresResource
+exe:requiresResource rdf:type owl:ObjectProperty ;
+                     rdfs:domain exe:Task ;
+                     rdfs:range exe:Resource ;
+                     rdfs:comment """
+Indicates which Resource(s) a Task needs. Examples: compute resources, 
+APIs, or data sets.
+""" ;
+                     rdfs:label "requires resource" .
+
+
+###  https://exe.ai#usesToken
+exe:usesToken rdf:type owl:ObjectProperty ;
+              rdfs:domain owl:Thing ;
+              rdfs:range exe:Token ;
+              rdfs:comment """
+Associates a Task or an Agent with a specific Token usage (payment, reward, 
+stake, or collateral).
+""" ;
+              rdfs:label "uses token" .
+
+
+###  https://exe.ai#wasTriggeredBy
+exe:wasTriggeredBy rdf:type owl:ObjectProperty ;
+                   rdfs:domain exe:Event ;
+                   rdfs:range [ rdf:type owl:Class ;
+                                owl:unionOf ( exe:Agent
+                                              exe:dApp
+                                            )
+                              ] ;
+                   rdfs:comment """
+Indicates which Agent or dApp caused or initiated an Event.
+""" ;
+                   rdfs:label "was triggered by" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://exe.ai#agreementTerms
+exe:agreementTerms rdf:type owl:DatatypeProperty ;
+                   rdfs:domain exe:Negotiation ;
+                   rdfs:range xsd:string ;
+                   rdfs:comment "A textual representation of the final or proposed agreement (e.g., price, conditions)." ;
+                   rdfs:label "agreement terms" .
+
+
+###  https://exe.ai#contactEndpoint
+exe:contactEndpoint rdf:type owl:DatatypeProperty ;
+                    rdfs:domain exe:Agent ;
+                    rdfs:range xsd:string ;
+                    rdfs:comment """
+A URI, URL, or other endpoint through which other entities (Agents, users) 
+can communicate with or send requests to this Agent.
+""" ;
+                    rdfs:label "contact endpoint" .
+
+
+###  https://exe.ai#contractAddress
+exe:contractAddress rdf:type owl:DatatypeProperty ;
+                    rdfs:domain exe:Contract ;
+                    rdfs:range xsd:string ;
+                    rdfs:comment "Specifies the deployed on-chain address of this Contract." ;
+                    rdfs:label "contract address" .
+
+
+###  https://exe.ai#formatName
+exe:formatName rdf:type owl:DatatypeProperty ;
+               rdfs:domain exe:DataFormat ;
+               rdfs:range xsd:string ;
+               rdfs:comment "Name or identifier of the data format (e.g., JSON, XML, Protobuf)." ;
+               rdfs:label "format name" .
+
+
+###  https://exe.ai#hasABI
+exe:hasABI rdf:type owl:DatatypeProperty ;
+           rdfs:domain exe:Contract ;
+           rdfs:range xsd:string ;
+           rdfs:comment "Stores a textual or JSON representation of the contract's ABI for invocation." ;
+           rdfs:label "has ABI" .
+
+
+###  https://exe.ai#hasAddress
+exe:hasAddress rdf:type owl:DatatypeProperty ;
+               rdfs:domain exe:Agent ;
+               rdfs:range xsd:string ;
+               rdfs:comment "Stores an Agent's on-chain address (Ethereum, CrossFi, etc.)." ;
+               rdfs:label "has address" .
+
+
+###  https://exe.ai#hasBlockNumber
+exe:hasBlockNumber rdf:type owl:DatatypeProperty ;
+                   rdfs:domain exe:Event ;
+                   rdfs:range xsd:integer ;
+                   rdfs:comment "References the block number on the blockchain where this Event was recorded." ;
+                   rdfs:label "has block number" .
+
+
+###  https://exe.ai#hasCreationDate
+exe:hasCreationDate rdf:type owl:DatatypeProperty ;
+                    rdfs:domain exe:Task ;
+                    rdfs:range xsd:dateTime ;
+                    rdfs:comment "Records when a Task was first created in the system." ;
+                    rdfs:label "has creation date" .
+
+
+###  https://exe.ai#hasDeadline
+exe:hasDeadline rdf:type owl:DatatypeProperty ;
+                rdfs:domain exe:Task ;
+                rdfs:range xsd:dateTime ;
+                rdfs:comment "Indicates a target or mandatory date/time by which the Task should be completed." ;
+                rdfs:label "has deadline" .
+
+
+###  https://exe.ai#hasDescription
+exe:hasDescription rdf:type owl:DatatypeProperty ;
+                   rdfs:domain owl:Thing ;
+                   rdfs:range xsd:string ;
+                   rdfs:comment "A longer description or notes about an entity." ;
+                   rdfs:label "has description" .
+
+
+###  https://exe.ai#hasName
+exe:hasName rdf:type owl:DatatypeProperty ;
+            rdfs:domain owl:Thing ;
+            rdfs:range xsd:string ;
+            rdfs:comment "A human-readable name for Agents, Tasks, Protocols, Roles, etc." ;
+            rdfs:label "has name" .
+
+
+###  https://exe.ai#hasTransactionHash
+exe:hasTransactionHash rdf:type owl:DatatypeProperty ;
+                       rdfs:domain exe:Event ;
+                       rdfs:range xsd:string ;
+                       rdfs:comment "Links an Event to the on-chain transaction hash it occurred in." ;
+                       rdfs:label "has transaction hash" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://exe.ai#Agent
+exe:Agent rdf:type owl:Class ;
+          rdfs:comment """
+An entity (human, AI, or automated software component) capable of:
+ - Performing tasks,
+ - Holding tokens,
+ - Negotiating with other agents,
+ - Interacting with smart contracts,
+ - Operating on specific blockchain networks,
+ - Potentially bridging to the EXE main environment.
+""" ;
+          rdfs:label "Agent" .
+
+
+###  https://exe.ai#BlockchainNetwork
+exe:BlockchainNetwork rdf:type owl:Class ;
+                      rdfs:comment """
+Represents a distinct blockchain or sidechain on which Agents or Contracts operate 
+(e.g., Ethereum, CrossFi Testnet, BNB Chain). Contains information such as chain ID.
+""" ;
+                      rdfs:label "Blockchain Network" .
+
+
+###  https://exe.ai#Bridge
+exe:Bridge rdf:type owl:Class ;
+           rdfs:comment """
+Represents a bridging mechanism or infrastructure that connects a blockchain 
+environment or an Agent to the EXE protocol (e.g., cross-chain bridge solutions, 
+layer-2 bridging, etc.).
+""" ;
+           rdfs:label "Bridge" .
+
+
+###  https://exe.ai#Capability
+exe:Capability rdf:type owl:Class ;
+               rdfs:comment """
+Represents a specific skill or function an Agent can perform (e.g., 
+'providesLiquidity', 'validatesTransactions', 'managesGameAssets'). 
+Agents can hold multiple capabilities.
+""" ;
+               rdfs:label "Capability" .
+
+
+###  https://exe.ai#Collaboration
+exe:Collaboration rdf:type owl:Class ;
+                  rdfs:comment """
+Represents a collaborative group or arrangement where multiple Agents 
+collectively work on (or negotiate about) a Task. This might involve 
+role distribution, negotiation, shared resources, and outcome coordination.
+""" ;
+                  rdfs:label "Collaboration" .
+
+
+###  https://exe.ai#Contract
+exe:Contract rdf:type owl:Class ;
+             rdfs:comment """
+A smart contract deployed on a blockchain network. Contains an address, possible ABI, 
+and references the network on which it runs.
+""" ;
+             rdfs:label "Contract" .
+
+
+###  https://exe.ai#DataFormat
+exe:DataFormat rdf:type owl:Class ;
+               rdfs:comment """
+Describes the format in which an Agent produces or consumes data 
+(e.g., JSON, XML, binary, or a domain-specific format).
+""" ;
+               rdfs:label "Data Format" .
+
+
+###  https://exe.ai#DeFiProtocol
+exe:DeFiProtocol rdf:type owl:Class ;
+                 rdfs:subClassOf exe:Protocol ;
+                 rdfs:comment """
+A decentralized finance protocol offering lending, liquidity pools, staking, 
+flash loans, or other financial services. 
+""" ;
+                 rdfs:label "DeFi Protocol" .
+
+
+###  https://exe.ai#Event
+exe:Event rdf:type owl:Class ;
+          rdfs:comment """
+Captures a notable occurrence: creation or completion of tasks, payment releases, 
+agent registrations, negotiations, or protocol actions. 
+Often references tasks, collaborations, or agents involved.
+""" ;
+          rdfs:label "Event" .
+
+
+###  https://exe.ai#GamblingProtocol
+exe:GamblingProtocol rdf:type owl:Class ;
+                     rdfs:subClassOf exe:Protocol ;
+                     rdfs:comment """
+A protocol enabling betting, casino-like games, lotteries, or other forms 
+of chance-based interaction on-chain.
+""" ;
+                     rdfs:label "Gambling Protocol" .
+
+
+###  https://exe.ai#GameFiProtocol
+exe:GameFiProtocol rdf:type owl:Class ;
+                   rdfs:subClassOf exe:Protocol ;
+                   rdfs:comment """
+A protocol focusing on blockchain-based gaming, where Agents may participate 
+in game mechanics, asset trading, or in-game economies.
+""" ;
+                   rdfs:label "GameFi Protocol" .
+
+
+###  https://exe.ai#InteractionType
+exe:InteractionType rdf:type owl:Class ;
+                    rdfs:comment """
+Specifies the mode of interaction or communication between parties: 
+H2M (human-to-machine), M2M (machine-to-machine), M2H (machine-to-human).
+""" ;
+                    rdfs:label "Interaction Type" .
+
+
+###  https://exe.ai#Negotiation
+exe:Negotiation rdf:type owl:Class ;
+                rdfs:comment """
+Represents a negotiation event or process where Agents or roles discuss terms 
+(payment, execution details, resource sharing) to arrive at a mutual agreement 
+on how to complete or price a Task. 
+""" ;
+                rdfs:label "Negotiation" .
+
+
+###  https://exe.ai#Protocol
+exe:Protocol rdf:type owl:Class ;
+             rdfs:subClassOf exe:dApp ;
+             rdfs:comment """
+A specific protocol or platform that a dApp implements. Protocol can be 
+DeFi, GameFi, SocialFi, Gambling, or other specialized categories.
+""" ;
+             rdfs:label "Protocol" .
+
+
+###  https://exe.ai#Resource
+exe:Resource rdf:type owl:Class ;
+             rdfs:comment """
+A generic resource required to fulfill a Task (GPU compute, data sets, web APIs, 
+or other external dependencies).
+""" ;
+             rdfs:label "Resource" .
+
+
+###  https://exe.ai#Role
+exe:Role rdf:type owl:Class ;
+         rdfs:comment """
+Defines a functional or operational role an Agent can have in the EXE ecosystem 
+(e.g., Validator, Lender, LiquidityProvider, Player, etc.).
+""" ;
+         rdfs:label "Role" .
+
+
+###  https://exe.ai#SocialFiProtocol
+exe:SocialFiProtocol rdf:type owl:Class ;
+                     rdfs:subClassOf exe:Protocol ;
+                     rdfs:comment """
+A protocol blending social networking features with decentralized finance 
+(e.g. social tokens, influence mining, tokenized communities).
+""" ;
+                     rdfs:label "SocialFi Protocol" .
+
+
+###  https://exe.ai#Task
+exe:Task rdf:type owl:Class ;
+         rdfs:comment """
+A discrete piece of work that may involve multiple Agents, resources, 
+tokens for payment, and specific protocols. Tasks can have statuses (Created, 
+InProgress, Completed, Cancelled) and may require a Collaboration among Agents.
+""" ;
+         rdfs:label "Task" .
+
+
+###  https://exe.ai#TaskStatus
+exe:TaskStatus rdf:type owl:Class ;
+               rdfs:comment """
+Enumerates the lifecycle states a Task can be in (Created, InProgress, Completed, Cancelled).
+""" ;
+               rdfs:label "Task Status" .
+
+
+###  https://exe.ai#Token
+exe:Token rdf:type owl:Class ;
+          rdfs:comment """
+Represents a cryptographic token (ERC-20, etc.), used for payments, staking, 
+collateral, or rewards in tasks or protocol interactions.
+""" ;
+          rdfs:label "Token" .
+
+
+###  https://exe.ai#dApp
+exe:dApp rdf:type owl:Class ;
+         rdfs:comment """
+A decentralized application integrating with the EXE protocol for agent collaboration 
+or domain-specific operations. Subclasses may include DeFi, GameFi, SocialFi, etc.
+""" ;
+         rdfs:label "dApp" .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  https://exe.ai#Cancelled
+exe:Cancelled rdf:type owl:NamedIndividual ,
+                       exe:TaskStatus ;
+              rdfs:comment "Task was terminated or became invalid before successful completion." ;
+              rdfs:label "Cancelled" .
+
+
+###  https://exe.ai#Completed
+exe:Completed rdf:type owl:NamedIndividual ,
+                       exe:TaskStatus ;
+              rdfs:comment "Task has been fully finished, meeting all requirements." ;
+              rdfs:label "Completed" .
+
+
+###  https://exe.ai#Created
+exe:Created rdf:type owl:NamedIndividual ,
+                     exe:TaskStatus ;
+            rdfs:comment "Task is newly created but not yet started." ;
+            rdfs:label "Created" .
+
+
+###  https://exe.ai#CrossFiNetwork
+exe:CrossFiNetwork rdf:type owl:NamedIndividual ,
+                            exe:BlockchainNetwork ;
+                   rdfs:comment "An example cross-chain or testnet network." ;
+                   rdfs:label "CrossFi" .
+
+
+###  https://exe.ai#EthereumNetwork
+exe:EthereumNetwork rdf:type owl:NamedIndividual ,
+                             exe:BlockchainNetwork ;
+                    rdfs:comment "The main Ethereum network." ;
+                    rdfs:label "Ethereum" .
+
+
+###  https://exe.ai#GambleCoin
+exe:GambleCoin rdf:type owl:NamedIndividual ,
+                        exe:GamblingProtocol ;
+               exe:hasName "GambleCoin Protocol" ;
+               rdfs:comment "A sample Gambling protocol for decentralized casino-style games." .
+
+
+###  https://exe.ai#GameFiX
+exe:GameFiX rdf:type owl:NamedIndividual ,
+                     exe:GameFiProtocol ;
+            exe:hasName "GameFiX Protocol" ;
+            rdfs:comment "An example GameFi protocol involving NFT-based game assets and play-to-earn mechanics." .
+
+
+###  https://exe.ai#GamePlayerRole
+exe:GamePlayerRole rdf:type owl:NamedIndividual ,
+                            exe:Role ;
+                   exe:hasName "Game Player Role" ;
+                   rdfs:comment "Agent role: participates in GameFi protocols or NFT-based games." .
+
+
+###  https://exe.ai#H2M
+exe:H2M rdf:type owl:NamedIndividual ,
+                 exe:InteractionType ;
+        rdfs:comment """
+Represents interactions initiated by a human (Agent) to a machine system 
+or automated Agent.
+""" ;
+        rdfs:label "Human-to-Machine" .
+
+
+###  https://exe.ai#InProgress
+exe:InProgress rdf:type owl:NamedIndividual ,
+                        exe:TaskStatus ;
+               rdfs:comment "Task is actively being worked on by one or more Agents." ;
+               rdfs:label "InProgress" .
+
+
+###  https://exe.ai#LiquidityProviderRole
+exe:LiquidityProviderRole rdf:type owl:NamedIndividual ,
+                                   exe:Role ;
+                          exe:hasName "Liquidity Provider Role" ;
+                          rdfs:comment "Agent role: supplies liquidity in DeFi or invests in liquidity pools." .
+
+
+###  https://exe.ai#M2H
+exe:M2H rdf:type owl:NamedIndividual ,
+                 exe:InteractionType ;
+        rdfs:comment """
+Represents an automated system or Agent providing information, data, or 
+requests to a human participant.
+""" ;
+        rdfs:label "Machine-to-Human" .
+
+
+###  https://exe.ai#M2M
+exe:M2M rdf:type owl:NamedIndividual ,
+                 exe:InteractionType ;
+        rdfs:comment """
+Represents interactions between two automated systems or software Agents 
+without direct human involvement.
+""" ;
+        rdfs:label "Machine-to-Machine" .
+
+
+###  https://exe.ai#ManagesNFTs
+exe:ManagesNFTs rdf:type owl:NamedIndividual ,
+                         exe:Capability ;
+                exe:hasName "managesNFTs" ;
+                rdfs:comment "Indicates that the agent can handle NFT minting, transferring, or in-game assets." .
+
+
+###  https://exe.ai#ProvidesLiquidity
+exe:ProvidesLiquidity rdf:type owl:NamedIndividual ,
+                               exe:Capability ;
+                      exe:hasName "providesLiquidity" ;
+                      rdfs:comment "Indicates that the agent can supply liquidity to a protocol (e.g. DeFi pools)." .
+
+
+###  https://exe.ai#SocialFiZ
+exe:SocialFiZ rdf:type owl:NamedIndividual ,
+                       exe:SocialFiProtocol ;
+              exe:hasName "SocialFiZ Protocol" ;
+              rdfs:comment "An example SocialFi protocol that tokenizes social influence and community interactions." .
+
+
+###  https://exe.ai#ValidatesTasks
+exe:ValidatesTasks rdf:type owl:NamedIndividual ,
+                            exe:Capability ;
+                   exe:hasName "validatesTasks" ;
+                   rdfs:comment "Indicates that the agent can check correctness or finalize tasks." .
+
+
+###  https://exe.ai#ValidatorRole
+exe:ValidatorRole rdf:type owl:NamedIndividual ,
+                           exe:Role ;
+                  exe:hasName "Validator Role" ;
+                  rdfs:comment "Agent role: can validate tasks or check correctness, possibly using ZK-proofs." .
+
+
+###  Generated by the OWL API (version 4.5.26.2023-07-17T20:34:13Z) https://github.com/owlcs/owlapi
