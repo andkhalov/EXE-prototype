@@ -1,15 +1,14 @@
 version: '3.3'
-
 services:
   graphdb:
-    image: ontotext/graphdb:latest
+    build:
+      context: /Users/andreykhalov/HULK/CroddFi/EXE/exe_prototype
+      dockerfile: graphdb/Dockerfile
     container_name: graphdb_exe
     ports:
+      - "7200:7200"
       - "7300:7300"
     volumes:
       - ./data:/opt/graphdb/home/data
-    environment:
-
-      # add correct credentials in .env.
-      - GDB_ADMIN_USER=${GDB_ADMIN_USER}
-      - GDB_ADMIN_PASSWORD=${GDB_ADMIN_PASSWORD}
+    env_file:
+      - ../.env
