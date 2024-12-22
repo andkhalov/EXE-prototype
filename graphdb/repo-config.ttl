@@ -1,11 +1,8 @@
 @prefix rep: <http://www.ontotext.com/trree/repParams#>.
-@prefix ws: <http://www.ontotext.com/owlim/semanticalignments#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix guard: <http://www.ontotext.com/owlim/graphdb/security#>.
 
-[] rep:repositoryID "EXE-Repo" ; 
+<http://www.ontotext.com/graphdb/repository/EXE-Repo>
+   rep:repositoryID "EXE-Repo" ;
    rdfs:label "EXE Knowledge Graph" ;
-   rep:repositoryType "free" .
-
-# Additional settings can be added below if desired
-# Examples, enabling inference, synonyms, custom rules, etc.
+   rep:repositoryType "free" ;
+   rep:repositoryImpl "graphdb:Free" .

@@ -26,18 +26,19 @@ def repository_exists():
     return False
 
 def create_repository():
-    """Create repo woth config file"""
+    """Create repository with config file"""
     print(f"Repository {REPO_NAME} not found. Creating repository...")
     url = f"{BASE_URL}/rest/repositories"
     try:
         with open("repo-config.ttl", "rb") as f:
-            files = { 'config': ('repo-config.ttl', f, "text/plain") }
+            files = { 'config': ('repo-config.ttl', f, "text/turtle") }
             response = requests.post(url, files=files, auth=(GDB_ADMIN_USER, GDB_ADMIN_PASSWORD))
             response.raise_for_status()
     except Exception as e:
         print(f"Repository creation error: {e}")
+        print("Response text:", response.text if 'response' in locals() else "No response")
         sys.exit(1)
-    print(f"Repository {REPO_NAME} created successfull.")
+    print(f"Repository {REPO_NAME} created successfully.")
 
 def ontology_loaded():
     """Checking ontology."""
