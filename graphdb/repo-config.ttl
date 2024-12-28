@@ -1,8 +1,16 @@
-@prefix rep: <http://www.ontotext.com/trree/repParams#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rep: <http://www.openrdf.org/config/repository#>.
+@prefix sr: <http://www.openrdf.org/config/repository/sail#>.
+@prefix sail: <http://www.openrdf.org/config/sail#>.
+@prefix graphdb: <http://www.ontotext.com/graphdb/config#>.
 
-<http://www.ontotext.com/graphdb/repository/EXE-Repo>
+[] a rep:Repository ;
    rep:repositoryID "EXE-Repo" ;
-   rdfs:label "EXE Knowledge Graph" ;
-   rep:repositoryType "free" ;
-   rep:repositoryImpl "graphdb:Free" .
+   rep:repositoryImpl [
+       rep:repositoryType "openrdf:SailRepository" ;
+       sr:sailImpl [
+           sail:sailType "graphdb:Sail" ;
+           graphdb:freeEdition "true" ;
+           # Optional: specify a ruleset, e.g. RDFS or OWL-Horst
+           graphdb:ruleset "rdfs"
+       ]
+   ] .
