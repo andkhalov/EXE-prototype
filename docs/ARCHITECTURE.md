@@ -120,6 +120,11 @@ EXE-prototype/
 │
 ├── 📂 graphdb/
 │   ├── docker-compose.yml               # Docker setup for GraphDB
+│   ├── Dockerfile                       # Docker for configuration
+│   ├── entrypoin.sh                     # GraphDB settings
+│   ├── repo-config.ttl                  # Config for GraphDB repository creation
+│   ├── setup-graphdb.sh                 # server setup file
+│   ├── upload_ontology_abox.py          # Creating repo and upload ontology script (can be done with GUI)
 │   ├── queries/
 │   │   ├── sample_queries.sparql
 │   │   └── insert_triples.sparql
