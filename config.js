@@ -18,21 +18,18 @@ const NETWORKS = {
   
     crossfiTestnet: {
       name: "CrossFi Testnet",
-      chainId: "YOUR_CROSSFI_TESTNET_ID",  // replace with actual chain ID
-      rpcUrl: "https://crossfi-testnet-rpc-url",  // replace with actual CrossFi RPC URL
+      chainId: 4157, // CrossFi EVM = 4157
+      rpcUrl: "https://crossfi-testnet-rpc-url", // testnet EVM RPC
       contracts: {
-        EXETaskManager: "0x...",      // replace after deployment
-        AgentController: "0x...",     // replace after deployment
-        GraphSync: "0x...",           // replace after deployment
-        dAppProxyModule: "0x...",     // replace after deployment
-        TokenBurner: "0x...",         // replace after deployment
-        ZKValidator: "0x...",         // replace after deployment
-        MockERC20: "0x...",           // replace after deployment
-      },
-    },
+        EXETaskManager: "0x...",
+        AgentController: "0x...",
+        GraphSync: "0x...",
+        dAppProxyModule: "0x...",
+        TokenBurner: "0x...",
+        ZKValidator: "0x...",
+        MockERC20: "0x..."
+      }
+    }
   };
   
-  // Switch this to quickly toggle between local and CrossFi Testnet deployment
-  const ACTIVE_NETWORK = NETWORKS.local;
-  
-  module.exports = ACTIVE_NETWORK;  
+  module.exports = NETWORKS;

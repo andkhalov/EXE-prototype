@@ -172,12 +172,16 @@ EXE-prototype/
 │   │       └── PaymentSummary.jsx
 │   └── package.json
 │
+├── 📂 cache/
+│
+├── 📂 artifacts/
+│
 ├── history-builder/
 │   ├── history-plan.json
 │   └── history-builder.py
 │
 ├── .gitignore
-├── package.json
+├── package.json                # npm init
 ├── hardhat.config.js
 ├── config.js
 └── README.md

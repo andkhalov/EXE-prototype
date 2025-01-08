@@ -5,7 +5,7 @@ import requests
 
 """
 graph_engine.py provides a Python interface to interact with a
-GraphDB repository via SPARQL queries and updates.
+GraphDB repository via SPARQL queries and updates in the context of EXE project.
 """
 
 # Optional: read these from environment or from a config file
