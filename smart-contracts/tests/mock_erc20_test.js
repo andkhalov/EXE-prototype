@@ -7,7 +7,7 @@ describe("MockERC20", function () {
   before(async () => {
     [owner, alice] = await ethers.getSigners();
     const MockERC20 = await ethers.getContractFactory("MockERC20");
-    token = await MockERC20.deploy("TestToken", "TTK", ethers.utils.parseEther("1000000"));
+    token = await MockERC20.deploy("EXEtest", "EXET", ethers.utils.parseEther("1000000"));
     await token.deployed();
   });
 
