@@ -14,7 +14,7 @@ const CROSSFI_KEYS = [
 ].filter(k => k); // remoove undefined
 
 module.exports = {
-  solidity: "0.8.17",
+  solidity: "0.8.20",
 
   networks: {
     // 1)  Hardhat-network for local tests "npx hardhat test"
