@@ -2,19 +2,21 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("AgentController", function () {
-  let AgentController, agentCtrl;
+  let agentCtrl;
   let owner, bob;
 
-  before(async () => {
+  before(async function () {
     [owner, bob] = await ethers.getSigners();
-    AgentController = await ethers.getContractFactory("AgentController");
+
+    const AgentController = await ethers.getContractFactory("AgentController");
+    // В ethers v6 объект уже развернут – вызов deployed() не нужен.
     agentCtrl = await AgentController.deploy();
-    await agentCtrl.deployed();
   });
 
-  it("should register agent with role", async () => {
+  it("should register agent with role", async function () {
     const tx = await agentCtrl.connect(bob).registerAgent("Validator");
     const rcpt = await tx.wait();
+
     const ev = rcpt.events.find(e => e.event === "AgentRegistered");
     expect(ev).to.not.be.undefined;
     expect(ev.args.agent).to.equal(bob.address);

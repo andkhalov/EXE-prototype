@@ -1,41 +1,39 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("dAppProxyModule", () => {
+describe("dAppProxyModule", function () {
   let proxy, manager, token;
   let owner, performer;
 
-  before(async () => {
+  before(async function () {
     [owner, performer] = await ethers.getSigners();
 
-    // Deploy token
+    // Развернём токен, используя ethers.parseEther вместо ethers.utils.parseEther
     const MockERC20 = await ethers.getContractFactory("MockERC20");
-    token = await MockERC20.deploy("EXE", "EXE", ethers.utils.parseEther("1000000"));
-    await token.deployed();
+    token = await MockERC20.deploy("EXE", "EXE", ethers.parseEther("1000000"));
 
-    // Deploy manager
+    // Развернём TaskManager
     const TaskManager = await ethers.getContractFactory("EXETaskManager");
-    manager = await TaskManager.deploy(token.address);
-    await manager.deployed();
-
-    // Deploy proxy
+    manager = await TaskManager.deploy(token.target); // token.target (в ethers v6 это адрес контракта)
+    
+    // Развернём прокси-модуль
     const ProxyModule = await ethers.getContractFactory("dAppProxyModule");
     proxy = await ProxyModule.deploy();
-    await proxy.deployed();
   });
 
-  it("should call createTask via proxy", async () => {
-    // We skip the payment part, just check the event
+  it("should call createTask via proxy", async function () {
+    // Проверяем событие ProxyCall (логика оплаты пропущена)
     const tx = await proxy.proxyCreateTask(
-      manager.address,
+      manager.target,
       performer.address,
-      ethers.utils.parseEther("500"),
+      ethers.parseEther("500"),
       "<taskXYZ> <hasStatus> <Created>"
     );
     const rcpt = await tx.wait();
+
     const evt = rcpt.events.find(e => e.event === "ProxyCall");
     expect(evt).to.not.be.undefined;
     expect(evt.args.dapp).to.equal(owner.address);
-    expect(evt.args.target).to.equal(manager.address);
+    expect(evt.args.target).to.equal(manager.target);
   });
 });
