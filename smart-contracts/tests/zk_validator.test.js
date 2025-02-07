@@ -9,11 +9,10 @@ describe("ZKValidator", function () {
 
     const ZKValidator = await ethers.getContractFactory("ZKValidator");
     zk = await ZKValidator.deploy();
-    await zk.deployed();
   });
 
   it("should validate a proof stub", async function() {
-    const dummyProof = ethers.utils.randomBytes(32);
+    const dummyProof = ethers.randomBytes(32);
     const tx = await zk.connect(owner).validateProof(dummyProof);
     const rcpt = await tx.wait();
 
