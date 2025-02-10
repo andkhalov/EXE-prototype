@@ -2,52 +2,75 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("EXETaskManager", function () {
-  let taskManager, token, owner, performer;
+  let taskManager, token;
+  let owner, performer;
 
-  before(async function() {
+  before(async function () {
     [owner, performer] = await ethers.getSigners();
 
-    // Развернём MockERC20
+    // Deploy a MockERC20 token.
     const MockERC20 = await ethers.getContractFactory("MockERC20");
     token = await MockERC20.deploy("Token", "TKN", ethers.parseEther("1000000"));
 
-    // Развернём TaskManager
+    // Deploy EXETaskManager with the token address.
     const TaskManager = await ethers.getContractFactory("EXETaskManager");
     taskManager = await TaskManager.deploy(token.target);
   });
 
-  it("should create and emit TaskCreated", async function() {
+  it("should create and emit TaskCreated", async function () {
+    // Owner creates a task assigned to performer.
     const tx = await taskManager.connect(owner).createTask(
       performer.address,
       ethers.parseEther("100"),
       "<task1> <hasStatus> <Created>"
     );
-    const rcpt = await tx.wait();
+    const receipt = await tx.wait();
 
-    const event = rcpt.events.find(e => e.event === "TaskCreated");
-    expect(event).to.not.be.undefined;
-    expect(event.args.taskId).to.equal(1);
+    // Decode logs using the taskManager interface.
+    const events = receipt.logs
+      .map((log) => {
+        try {
+          return taskManager.interface.parseLog(log);
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter((e) => e !== null);
+
+    // Find the TaskCreated event.
+    const taskCreatedEvent = events.find((e) => e.name === "TaskCreated");
+    expect(taskCreatedEvent).to.not.be.undefined;
+    expect(taskCreatedEvent.args.taskId).to.equal(1);
   });
 
-  it("should complete task and transfer tokens", async function() {
-    // Approval для перевода токенов
-    await token.connect(owner).approve(
-      taskManager.target,
-      ethers.parseEther("1000000")
-    );
+  it("should complete task and transfer tokens", async function () {
+    // Approve token spending for the taskManager from the owner (task creator).
+    await token.connect(owner).approve(taskManager.target, ethers.parseEther("1000000"));
 
-    // Performer завершает задачу №1
-    const tx2 = await taskManager.connect(performer).completeTask(
+    // Performer completes the task.
+    const tx = await taskManager.connect(performer).completeTask(
       1,
       "<task1> <hasStatus> <Completed>"
     );
-    const rcpt2 = await tx2.wait();
+    const receipt = await tx.wait();
 
-    const evt = rcpt2.events.find(e => e.event === "TaskCompleted");
-    expect(evt).to.not.be.undefined;
+    // Decode logs using the taskManager interface.
+    const events = receipt.logs
+      .map((log) => {
+        try {
+          return taskManager.interface.parseLog(log);
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter((e) => e !== null);
 
-    // Проверяем баланс performer
-    const bal = await token.balanceOf(performer.address);
-    expect(bal.toString()).to.equal(ethers.parseEther("100").toString());
+    // Find the TaskCompleted event.
+    const taskCompletedEvent = events.find((e) => e.name === "TaskCompleted");
+    expect(taskCompletedEvent).to.not.be.undefined;
+
+    // Verify that the performer received the tokens.
+    const performerBalance = await token.balanceOf(performer.address);
+    expect(performerBalance.toString()).to.equal(ethers.parseEther("100").toString());
   });
 });
