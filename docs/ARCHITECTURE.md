@@ -160,6 +160,7 @@ EXE-prototype/
 │       └── llm_negotiation.py
 │
 ├── 📂 scripts/
+│   ├── deploy_all.js
 │   └── demo.ts
 │
 ├── 📂 ui/
@@ -180,10 +181,14 @@ EXE-prototype/
 │   ├── history-plan.json
 │   └── history-builder.py
 │
+├── .env.sample
+├── .env                        # add yours
 ├── .gitignore
 ├── package.json                # npm init
 ├── hardhat.config.js
 ├── config.js
+├── package-lock.json
+├── package.json
 └── README.md
 ```
 
