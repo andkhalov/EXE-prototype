@@ -128,7 +128,7 @@ EXE-prototype/
 │   ├── queries/
 │   │   ├── sample_queries.sparql
 │   │   └── insert_triples.sparql
-│   └── graph_engine.py                  # GraphDB interaction script (Python)
+│   └── graph_engine.py                  # GraphDB interaction script with RPC listener and SPARQL requests to GDB (Python)
 │
 📂 smart-contracts/
 ├── 📂 contracts/
@@ -155,6 +155,7 @@ EXE-prototype/
 │   │   ├── ValidatorAgent.ts
 │   │   ├── LiquidityPool1.ts
 │   │   ├── LendingAgent.ts
+│   │   ├── TaskCreatorAgent.ts
 │   │   └── LiquidityPool2.ts
 │   └── inference/
 │       └── llm_negotiation.py
