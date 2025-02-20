@@ -162,7 +162,7 @@ EXE-prototype/
 │
 ├── 📂 scripts/
 │   ├── deploy_all.js
-│   └── demo.ts
+│   └── demo_agents.tsß
 │
 ├── 📂 ui/
 │   ├── src/
@@ -190,6 +190,7 @@ EXE-prototype/
 ├── config.js
 ├── package-lock.json
 ├── package.json
+├── tsconfig.json
 └── README.md
 ```
 

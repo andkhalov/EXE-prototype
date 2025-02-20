@@ -7,15 +7,19 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:local": "hardhat run scripts/deploy.js --network local",
-    "deploy:crossfi": "hardhat run scripts/deploy.js --network crossfiTestnet"
+    "deploy:crossfi": "hardhat run scripts/deploy.js --network crossfiTestnet",
+    "agent-demo": "ts-node scripts/demo_agents.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^22.13.16",
     "dotenv": "^16.4.7",
-    "hardhat": "^2.22.19"
+    "hardhat": "^2.22.19",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.2.0"
