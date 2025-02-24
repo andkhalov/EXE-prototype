@@ -156,6 +156,7 @@ EXE-prototype/
 │   │   ├── LiquidityPool1.ts
 │   │   ├── LendingAgent.ts
 │   │   ├── TaskCreatorAgent.ts
+│   │   ├── InferenceAgent.ts
 │   │   └── LiquidityPool2.ts
 │   └── inference/
 │       └── llm_negotiation.py
