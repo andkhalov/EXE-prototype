@@ -1,57 +1,54 @@
-import {
-  JsonRpcProvider,
-  Wallet,
-  Contract,
-  formatEther,
-} from "ethers";
+// /smart-contracts/agents/base/AgentBase.ts
+import { ethers } from "ethers";
 
 // We assume your project uses a localConfig in config.js
-import localConfig from "../../../config.js"; 
+import config from "../../../config.js"; 
 
 // Path to your artifact JSON
 import abiTaskManager from "../../artifacts/smart-contracts/contracts/EXETaskManager.sol/EXETaskManager.json";
 
-// If the above import complains about "Cannot find module",
-// make sure the path is correct. Possibly use ../../../artifacts/... 
-// depending on real folder layout.
-
-export class AgentBase {
-  protected provider: JsonRpcProvider;
-  public signer: Wallet;
-  protected taskManager: Contract;
+/**
+ * Abstract base class for all agents.
+ */
+export abstract class AgentBase {
+  protected provider: ethers.JsonRpcProvider;
+  public signer: ethers.Wallet;
+  protected taskManager: ethers.Contract;
 
   constructor(privateKey: string) {
-    // Ethers v6: new JsonRpcProvider(...)
-    this.provider = new JsonRpcProvider(localConfig.local.rpcUrl);
+    if (!privateKey) {
+      throw new Error("A valid private key must be provided.");
+    }
 
-    // Ethers v6: new Wallet(...)
-    this.signer = new Wallet(privateKey, this.provider);
+    // Initialize the provider using the RPC URL from configuration.
+    this.provider = new ethers.JsonRpcProvider(config.local.rpcUrl);
 
-    // Address from config
-    const taskAddress = localConfig.local.contracts.EXETaskManager;
+    // Create a signer (wallet) with the provided private key.
+    this.signer = new ethers.Wallet(privateKey, this.provider);
 
-    // Create a Contract object using the artifact's ABI + address + signer
-    this.taskManager = new Contract(taskAddress, abiTaskManager.abi, this.signer);
+    // Retrieve the Task Manager contract address from configuration.
+    const taskManagerAddress = config.local.contracts.EXETaskManager;
+    if (!taskManagerAddress) {
+      throw new Error("Task Manager address is missing in configuration.");
+    }
+
+    // Instantiate the Task Manager contract with its ABI and the signer.
+    this.taskManager = new ethers.Contract(taskManagerAddress, abiTaskManager.abi, this.signer);
   }
 
   /**
-   * Example: Return the token balance of this agent's address
+   * Retrieves the ERC20 token balance for the signer's address and returns it formatted as Ether.
+   * @param tokenAddress The ERC20 token contract address.
    */
-  async getBalance(tokenAddress: string): Promise<string> {
-    const abiToken = [
-      "function balanceOf(address) view returns (uint256)"
-    ];
-    // Ethers v6: new Contract(...)
-    const token = new Contract(tokenAddress, abiToken, this.signer);
-    const bal = await token.balanceOf(this.signer.address);
-    // With v6, use formatEther(...) from 'ethers'
-    return formatEther(bal);
-  }
-
-  /**
-   * Example helper: get agent's address
-   */
-  getAddress(): string {
-    return this.signer.address;
+  async getTokenBalance(tokenAddress: string): Promise<string> {
+    try {
+      const abi = ["function balanceOf(address) view returns (uint256)"];
+      const tokenContract = new ethers.Contract(tokenAddress, abi, this.signer);
+      const balance = await tokenContract.balanceOf(await this.signer.getAddress());
+      return ethers.formatEther(balance);
+    } catch (error) {
+      console.error("Error retrieving token balance:", error);
+      throw error;
+    }
   }
 }

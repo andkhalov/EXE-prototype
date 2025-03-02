@@ -4,7 +4,7 @@ import { AgentBase } from "../base/AgentBase";
 export class LiquidityPool2 extends AgentBase {
   /**
    * Provides liquidity using an alternative strategy (stub implementation).
-   * @param amount The amount of tokens to provide (e.g., "500").
+   * @param amount The amount of tokens to provide as a string (e.g., "500").
    */
   async provideLiquidity(amount: string): Promise<void> {
     try {

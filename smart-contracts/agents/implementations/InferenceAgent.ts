@@ -6,14 +6,14 @@ import { AgentBase } from "../base/AgentBase";
  */
 export class InferenceAgent extends AgentBase {
   /**
-   * Simulates negotiating task details (e.g., price).
-   * @param taskId The task identifier.
+   * Simulates negotiating for a task.
+   * @param taskId The ID of the task.
    * @returns A simulated negotiation result.
    */
   async negotiateTask(taskId: number): Promise<string> {
     try {
       console.log(`InferenceAgent: Negotiating for task #${taskId}...`);
-      // Simulate a negotiation process (in a real implementation, call your LLM API)
+      // Simulate an inference process (replace with a real LLM API call if needed)
       const negotiationResult = "price = 100 EXE, agreement successful";
       console.log(`InferenceAgent: Negotiation result for task #${taskId}: ${negotiationResult}`);
       return negotiationResult;
