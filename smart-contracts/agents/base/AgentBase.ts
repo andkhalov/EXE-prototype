@@ -37,6 +37,13 @@ export abstract class AgentBase {
   }
 
   /**
+   * Public getter to access the taskManager contract.
+   */
+  public getTaskManager(): ethers.Contract {
+    return this.taskManager;
+  }
+
+  /**
    * Retrieves the ERC20 token balance for the signer's address and returns it formatted as Ether.
    * @param tokenAddress The ERC20 token contract address.
    */

@@ -1,9 +1,8 @@
-// /agents/demo_agents.ts
+// /scripts/demo_agents.ts
 import "dotenv/config"; // load environment variables
+import { ethers, Contract, parseEther } from "ethers";
 import { TaskCreatorAgent } from "../smart-contracts/agents/implementations/TaskCreatorAgent";
 import { ValidatorAgent } from "../smart-contracts/agents/implementations/ValidatorAgent";
-
-import { Contract, parseEther } from "ethers";
 import localConfig from "../config.js"; // Adjust path if needed
 
 // Load private keys from environment variables
@@ -11,9 +10,7 @@ const CREATOR_KEY = process.env.LOCALNET_PRIVATE_KEY1;
 const VALIDATOR_KEY = process.env.LOCALNET_PRIVATE_KEY2;
 
 if (!CREATOR_KEY || !VALIDATOR_KEY) {
-  throw new Error(
-    "Please set LOCALNET_PRIVATE_KEY1 and LOCALNET_PRIVATE_KEY2 in your .env file"
-  );
+  throw new Error("Please set LOCALNET_PRIVATE_KEY1 and LOCALNET_PRIVATE_KEY2 in your .env file");
 }
 
 async function main() {
@@ -25,7 +22,7 @@ async function main() {
   console.log("Creator address:", creator.signer.address);
   console.log("Validator address:", validator.signer.address);
 
-  // Use validator's address as the performer
+  // Use validator's address as the performer for the task
   const performerAddress = validator.signer.address;
 
   // 1) Approve EXETaskManager to spend tokens on behalf of creator
@@ -43,14 +40,15 @@ async function main() {
 
   // 2) Creator creates a task for the validator
   console.log("\nTaskCreatorAgent -> createTask");
-  const createTaskTx = await creator.createTask(
+  await creator.createTask(
     performerAddress,
     "100",
     "<task1> <hasStatus> <Created>"
   );
-  // Optionally, query the task after creation if your contract provides a view function:
-  // const task = await creator.taskManager.tasks(1);
-  // console.log("Created task details:", task);
+
+  // Optionally, query the task after creation (if your contract exposes a view function):
+  const task = await creator.getTaskManager().tasks(1);
+  console.log("Stored task performer:", task.performer);
 
   // 3) Validator completes the task (assuming task ID is 1)
   console.log("\nValidatorAgent -> completeTask");
