@@ -7,6 +7,7 @@ import config from "../../../config.js";
 // Path to your artifact JSON
 import abiTaskManager from "../../artifacts/smart-contracts/contracts/EXETaskManager.sol/EXETaskManager.json";
 
+
 /**
  * Abstract base class for all agents.
  */
