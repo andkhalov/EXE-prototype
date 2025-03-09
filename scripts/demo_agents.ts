@@ -46,14 +46,14 @@ async function main() {
     "<task1> <hasStatus> <Created>"
   );
 
-  // Optionally, query the task after creation (if your contract exposes a view function):
+  // Optionally, query the task after creation:
   const task = await creator.getTaskManager().tasks(1);
   console.log("Stored task performer:", task.performer);
 
   // 3) Validator completes the task (assuming task ID is 1)
   console.log("\nValidatorAgent -> completeTask");
   await validator.completeTask(
-    1,
+    3, // CHANGE THIS +1 OR SMTH EACH TIME YOU RUN DEMO INSIDE ONE NETWORK SESSION!!!!!
     "<task1> <hasStatus> <Completed>"
   );
 

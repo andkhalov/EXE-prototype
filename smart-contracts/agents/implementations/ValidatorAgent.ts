@@ -16,7 +16,7 @@ export class ValidatorAgent extends AgentBase {
       console.log(`ValidatorAgent: Using nonce ${nonce} for completeTask`);
       
       // Send the transaction with the explicit nonce.
-      const tx = await this.taskManager.completeTask(taskId, rdfData, { nonce });
+      const tx = await this.taskManager.completeTask(taskId, rdfData);
       const receipt = await tx.wait();
       console.log(`ValidatorAgent: Task #${taskId} completed successfully! Transaction hash: ${receipt.transactionHash}`);
     } catch (error) {
