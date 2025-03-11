@@ -166,14 +166,15 @@ EXE-prototype/
 │   └── demo_agents.tsß
 │
 ├── 📂 ui/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   └── components/
-│   │       ├── TaskInput.jsx
-│   │       ├── AgentLog.jsx
-│   │       ├── RDFOutput.jsx
-│   │       └── PaymentSummary.jsx
-│   └── package.json
+│   ├── app.py                  # Flask app interface demonstration
+│   ├── requirements.txt
+│   ├── static/
+│   │   └── diagram.js
+│   └── templates/
+│       ├── base.html
+│       ├── index.html
+│       ├── negotiation.html
+│       └── success.html
 │
 ├── 📂 cache/
 │
@@ -195,4 +196,4 @@ EXE-prototype/
 └── README.md
 ```
 
-This architectural overview provides a detailed guide for the structured development and deployment of the EXE prototype (first version). 
+This architectural overview provides a detailed guide for the structured development and deployment of the EXE prototype (first version). │
