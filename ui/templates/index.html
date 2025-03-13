@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head>
+    <title>EXE Demo - Index</title>
+  </head>
+  <body>
+    <h1>EXE Multi-Agent Demo (Flask + TS Agents)</h1>
+    <p>Transaction ID (случайно назначен): <strong>{{ tx_id }}</strong></p>
+    <p><b>Внимание!</b> Возможны коллизии, т.к. число берется из [1..1000].</p>
+
+    <form method="POST" action="{{ url_for('negotiate') }}">
+      <input type="hidden" name="tx_id" value="{{ tx_id }}">
+      <button type="submit">Начать переговоры</button>
+    </form>
+  </body>
+</html>

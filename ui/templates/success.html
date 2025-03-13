@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head>
+    <title>EXE Demo - Done</title>
+  </head>
+  <body>
+    <h1>Transaction {{ tx_id }} completed!</h1>
+    <p>All agents have been paid, data inserted into the blockchain and GraphDB.</p>
+
+    <h3>Agent Interaction Graph</h3>
+    <div id="diagram"></div>
+    <script src="{{ url_for('static', filename='diagram.js') }}"></script>
+  </body>
+</html>
