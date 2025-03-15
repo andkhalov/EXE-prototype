@@ -163,6 +163,7 @@ EXE-prototype/
 │
 ├── 📂 scripts/
 │   ├── deploy_all.js
+│   ├── agent_negotiation.ts
 │   └── demo_agents.tsß
 │
 ├── 📂 ui/
