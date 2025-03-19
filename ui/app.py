@@ -61,7 +61,10 @@ def negotiate():
 
     try:
         result = subprocess.run(
-            cmd, capture_output=True, text=True, check=True
+            cmd, 
+            capture_output=True, 
+            text=True, 
+            check=True
         )
         # result.stdout — то, что вывел скрипт
         # Парсим JSON
