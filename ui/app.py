@@ -153,7 +153,9 @@ def signpay():
     })
 
     signed_tx = w3.eth.account.sign_transaction(build_tx, private_key=CREATOR_KEY)
-    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+
+    # In web3.py 6+, the attribute is `signed_tx.raw_transaction` (with underscore)
+    tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
     receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
     print("Receipt from chain:", receipt)
 
