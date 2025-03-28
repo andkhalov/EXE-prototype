@@ -12,10 +12,10 @@ export class InferenceAgent extends AgentBase {
    */
   async negotiateTask(taskId: number): Promise<string> {
     try {
-      console.log(`InferenceAgent: Negotiating for task #${taskId}...`);
+      console.error(`InferenceAgent: Negotiating for task #${taskId}...`);
       // Simulate an inference process (replace with a real LLM API call if needed)
       const negotiationResult = "price = 100 EXE, agreement successful";
-      console.log(`InferenceAgent: Negotiation result for task #${taskId}: ${negotiationResult}`);
+      console.error(`InferenceAgent: Negotiation result for task #${taskId}: ${negotiationResult}`);
       return negotiationResult;
     } catch (error) {
       console.error(`InferenceAgent: Error during negotiation for task #${taskId}:`, error);
