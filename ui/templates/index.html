@@ -1,16 +1,25 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>EXE Demo - Index</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <h1>EXE Multi-Agent Demo (Flask + TS Agents)</h1>
-    <p>Transaction ID (случайно назначен): <strong>{{ tx_id }}</strong></p>
-    <p><b>Внимание!</b> Возможны коллизии, т.к. число берется из [1..1000].</p>
+    <div class="container">
+      <h1>EXE Multi-Agent Demo (Flask + TS Agents)</h1>
+      
+      <div class="card">
+        <p>Transaction ID (randomly assigned): 
+          <strong>{{ tx_id }}</strong>
+        </p>
+        <p><strong>Note:</strong> Collisions may occur since this is just a random number from 1..1000.</p>
+      </div>
 
-    <form method="POST" action="{{ url_for('negotiate') }}">
-      <input type="hidden" name="tx_id" value="{{ tx_id }}">
-      <button type="submit">Начать переговоры</button>
-    </form>
+      <form method="POST" action="{{ url_for('negotiate') }}">
+        <input type="hidden" name="tx_id" value="{{ tx_id }}">
+        <button type="submit">Start Negotiation</button>
+      </form>
+    </div>
   </body>
 </html>

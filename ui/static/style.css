@@ -1,0 +1,69 @@
+/* static/style.css */
+
+/* Use a dark background and light text */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* deep dark */
+    color: #EEEEEE; /* light text */
+    font-family: "Verdana", "Helvetica Neue", Arial, sans-serif;
+  }
+  
+  /* A container to center content */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  /* Headings in turquoise accent */
+  h1, h2, h3 {
+    color: #1abc9c; /* turquoise accent */
+  }
+  
+  /* Buttons with a turquoise background, some hover effect */
+  button {
+    background-color: #1abc9c;
+    color: #FFFFFF;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+  }
+  
+  button:hover {
+    background-color: #16a085;
+  }
+  
+  /* Links in turquoise */
+  a, a:visited {
+    color: #1abc9c;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Lists stylings (optional) */
+  ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+  }
+  
+  /* Minor accent on strong text */
+  strong {
+    color: #aadcdc; 
+  }
+  
+  /* Just to demonstrate a small card or box if needed */
+  .card {
+    background-color: #1c1c1c;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  

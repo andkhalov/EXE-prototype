@@ -1,28 +1,35 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>EXE Demo - Negotiation</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <h1>Negotiation for Transaction {{ tx_id }}</h1>
-    <p><strong>Negotiation Summary:</strong> {{ negotiation_summary }}</p>
+    <div class="container">
+      <h1>Negotiation for Transaction {{ tx_id }}</h1>
 
-    <h2>Agent Costs</h2>
-    <ul>
-      {% for agent, cost in agent_costs.items() %}
-        <li>{{ agent }}: {{ cost }} EXE</li>
-      {% endfor %}
-    </ul>
+      <div class="card">
+        <p><strong>Negotiation Summary:</strong> {{ negotiation_summary }}</p>
+      </div>
 
-    <p>Gas Fee: {{ gas_fee }} EXE</p>
-    <p><strong>Total:</strong> {{ total }} EXE</p>
+      <h2>Agent Costs</h2>
+      <ul>
+        {% for agent, cost in agent_costs.items() %}
+          <li>{{ agent }}: <strong>{{ cost }}</strong> EXE</li>
+        {% endfor %}
+      </ul>
 
-    <p>ZK-Proof (stub): {{ zk_proof_stub }}</p>
+      <p>Gas Fee: <strong>{{ gas_fee }}</strong> EXE</p>
+      <p><strong>Total:</strong> <strong>{{ total }}</strong> EXE</p>
 
-    <form method="POST" action="{{ url_for('signpay') }}">
-      <input type="hidden" name="tx_id" value="{{ tx_id }}">
-      <input type="hidden" name="total" value="{{ total }}">
-      <button type="submit">Sign & Pay</button>
-    </form>
+      <p>ZK-Proof (stub): <strong>{{ zk_proof_stub }}</strong></p>
+
+      <form method="POST" action="{{ url_for('signpay') }}">
+        <input type="hidden" name="tx_id" value="{{ tx_id }}">
+        <input type="hidden" name="total" value="{{ total }}">
+        <button type="submit">Sign &amp; Pay</button>
+      </form>
+    </div>
   </body>
 </html>

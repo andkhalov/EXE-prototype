@@ -1,14 +1,18 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>EXE Demo - Done</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <h1>Transaction {{ tx_id }} completed!</h1>
-    <p>All agents have been paid, data inserted into the blockchain and GraphDB.</p>
+    <div class="container">
+      <h1>Transaction {{ tx_id }} Completed!</h1>
+      <p>All agents have been paid, data inserted into the blockchain, and GraphDB updated. Inspect log in HardHat terminal.</p>
 
-    <h3>Agent Interaction Graph</h3>
-    <div id="diagram"></div>
-    <script src="{{ url_for('static', filename='diagram.js') }}"></script>
+      <h3>Agent Interaction Graph</h3>
+      <div id="diagram"></div>
+      <script src="{{ url_for('static', filename='diagram.js') }}"></script>
+    </div>
   </body>
 </html>
