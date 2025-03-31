@@ -47,6 +47,6 @@ Each significant event is permanently logged as RDF triples directly on-chain th
 - Token economics summary: Clear depiction of payments and token burn events
 
 ### ✅ Deployment & Testing
-- Smart contracts are deployed to the CrossFi testnet environment (EVM-compatible).
+- Smart contracts can be deployed to the CrossFi testnet environment (EVM-compatible).
 - Agents and the UI are hosted locally (Node.js, React).
 - The demo scenario is executed end-to-end via an automated script (scripts/demo.ts), ensuring smooth, reproducible demonstrations.

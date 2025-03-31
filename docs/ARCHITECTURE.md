@@ -170,6 +170,7 @@ EXE-prototype/
 │   ├── app.py                  # Flask app interface demonstration
 │   ├── requirements.txt
 │   ├── static/
+│       ├── style.css
 │   │   └── diagram.js
 │   └── templates/
 │       ├── base.html
