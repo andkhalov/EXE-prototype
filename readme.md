@@ -143,7 +143,7 @@ EXE-prototype/
 1. Clone the repository:
 
 ```
-git clone https://github.com/yourusername/EXE-prototype.git
+git clone https://github.com/andkhalov/EXE-prototype.git
 cd EXE-prototype
 ```
 
